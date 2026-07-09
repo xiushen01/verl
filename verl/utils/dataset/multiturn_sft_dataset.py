@@ -16,13 +16,11 @@
 Multi-turn SFT dataset that supports training on conversation data with multiple turns
 """
 
-from __future__ import annotations
-
 import logging
 import os
 import re
 from functools import wraps
-from typing import TYPE_CHECKING, Any, Optional
+from typing import Any, Optional
 
 import numpy as np
 import pandas as pd
@@ -30,6 +28,7 @@ import torch
 import torch.nn.functional as F
 from omegaconf import DictConfig, ListConfig
 from torch.utils.data import Dataset
+from transformers import PreTrainedTokenizer, ProcessorMixin
 
 from verl.models.transformers.qwen2_vl import get_rope_index
 from verl.utils import hf_tokenizer
@@ -38,9 +37,6 @@ from verl.utils.dataset.vision_utils import process_image, process_video
 from verl.utils.fs import copy_local_path_from_hdfs
 from verl.utils.py_functional import convert_nested_value_to_list_recursive
 from verl.utils.tokenizer.chat_template import apply_chat_template, extract_system_prompt_and_generation
-
-if TYPE_CHECKING:
-    from transformers import PreTrainedTokenizer, ProcessorMixin
 
 logger = logging.getLogger(__file__)
 logger.setLevel(os.getenv("VERL_LOGGING_LEVEL", "WARN"))

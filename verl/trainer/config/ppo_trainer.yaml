@@ -356,7 +356,6 @@ global_profiler:
 
       # Whether to fail on unknown stage or missing msprobe
       strict: False
-
 # configs for SkipManager
 skip:
 

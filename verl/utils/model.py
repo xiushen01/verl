@@ -15,14 +15,12 @@
 Utilities to create common models from huggingface
 """
 
-from __future__ import annotations
-
 import json
 import os
 import re
 import warnings
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
 import numpy as np
 import torch
@@ -35,11 +33,10 @@ from transformers import (
     AutoModelForSequenceClassification,
     AutoModelForTokenClassification,
     GenerationConfig,
+    MistralForSequenceClassification,
     PretrainedConfig,
+    PreTrainedModel,
 )
-
-if TYPE_CHECKING:
-    from transformers import PreTrainedModel
 
 try:
     from transformers import AutoModelForVision2Seq
@@ -445,8 +442,6 @@ def _load_hf_model(config, model_config, is_value_model):
         warnings.simplefilter("ignore")
         # TODO: to find a better way to load mistral7b-rm lm_head
         if "mistral7b-rm" in config.model.path:
-            from transformers import MistralForSequenceClassification
-
             model = MistralForSequenceClassification.from_pretrained(
                 local_model_path,
                 torch_dtype="auto",
@@ -615,15 +610,15 @@ def patch_valuehead_model(model) -> None:
     from transformers import PreTrainedModel
     from trl import AutoModelForCausalLMWithValueHead
 
-    def tie_weights(self: AutoModelForCausalLMWithValueHead) -> None:
+    def tie_weights(self: "AutoModelForCausalLMWithValueHead") -> None:
         if isinstance(self.pretrained_model, PreTrainedModel):
             self.pretrained_model.tie_weights()
 
-    def get_input_embeddings(self: AutoModelForCausalLMWithValueHead) -> torch.nn.Module:
+    def get_input_embeddings(self: "AutoModelForCausalLMWithValueHead") -> torch.nn.Module:
         if isinstance(self.pretrained_model, PreTrainedModel):
             return self.pretrained_model.get_input_embeddings()
 
-    def get_output_embeddings(self: AutoModelForCausalLMWithValueHead) -> torch.nn.Module:
+    def get_output_embeddings(self: "AutoModelForCausalLMWithValueHead") -> torch.nn.Module:
         if isinstance(self.pretrained_model, PreTrainedModel):
             return self.pretrained_model.get_output_embeddings()
 

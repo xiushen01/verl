@@ -152,8 +152,7 @@ jobs:
           # its C extensions resolve against the nightly torch (fixes undefined symbol cublasGemmEx).
           export LD_PRELOAD="$(python3 -c 'import glob, os, sysconfig; c = glob.glob(os.path.join(sysconfig.get_paths()["purelib"], "nvidia", "cu13", "lib", "libcublas.so.13")); print(c[0] if c else "")')"
           NUM_GPUS=8 FSDP_SIZE=8 TOTAL_TRAIN_STEPS=2 \
-            bash tests/special_e2e/run_ppo_trainer_torchtitan.sh \
-              algorithm.rollout_correction.bypass_mode=True
+            bash tests/special_e2e/run_ppo_trainer_torchtitan.sh
 
   cleanup:
     runs-on: ubuntu-latest

@@ -122,8 +122,7 @@ jobs:
       - name: Install the current repository
         run: |
           pip3 install -r requirements-test.txt
-          pip3 install --no-deps -r requirements.txt
-          pip3 install transformers==5.3.0
+          pip3 install -r requirements.txt
           pip3 install --no-deps -e .
           pip3 uninstall -y mbridge
           pip3 install git+https://github.com/NVIDIA-NeMo/Megatron-Bridge.git@e2cfe7e --ignore-requires-python --no-deps --no-build-isolation
@@ -185,7 +184,6 @@ jobs:
       - name: Install the current repository
         run: |
           pip3 install -r requirements-test.txt
-          pip3 install transformers==5.3.0
           pip3 install --no-deps -e .
       - name: Check final pip list
         run: |
@@ -287,9 +285,7 @@ jobs:
             MODEL_ID=Qwen/Qwen2.5-VL-3B-Instruct \
             ADV_ESTIMATOR=grpo RM_PAD=True USE_KL=True ENABLE_CHUNKED_PREFILL=False \
             SP_SIZE=2 \
-            bash tests/special_e2e/ppo_trainer/run_function_reward.sh \
-            +actor_rollout_ref.model.override_config.attn_implementation=sdpa \
-            +critic.model.override_config.attn_implementation=sdpa
+            bash tests/special_e2e/ppo_trainer/run_function_reward.sh
 
       - name: Running GEO3K VLM PPO E2E training tests on 8 L20 GPUs with rmpad using function rm
         run: |
@@ -299,9 +295,7 @@ jobs:
             MODEL_ID=Qwen/Qwen2.5-VL-3B-Instruct \
             ADV_ESTIMATOR=gae RM_PAD=True USE_KL=True ENABLE_CHUNKED_PREFILL=False \
             SP_SIZE=2 \
-            bash tests/special_e2e/ppo_trainer/run_function_reward.sh \
-            +actor_rollout_ref.model.override_config.attn_implementation=sdpa \
-            +critic.model.override_config.attn_implementation=sdpa
+            bash tests/special_e2e/ppo_trainer/run_function_reward.sh
       - name: Running GEO3K VLM GRPO E2E lora training tests on 8 L20 GPUs with rmpad using function rm
         run: |
           ray stop --force
@@ -311,9 +305,7 @@ jobs:
             ADV_ESTIMATOR=grpo RM_PAD=True USE_KL=True ENABLE_CHUNKED_PREFILL=False \
             SP_SIZE=2 \
             LORA_RANK=32 LORA_EXCLUDE=".*visual.*" \
-            bash tests/special_e2e/ppo_trainer/run_function_reward.sh \
-            +actor_rollout_ref.model.override_config.attn_implementation=sdpa \
-            +critic.model.override_config.attn_implementation=sdpa
+            bash tests/special_e2e/ppo_trainer/run_function_reward.sh
 
   cleanup:
     runs-on: ubuntu-latest

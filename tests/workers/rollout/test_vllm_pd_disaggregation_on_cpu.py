@@ -33,14 +33,6 @@ import pytest
 
 from verl.workers.config import DisaggregationConfig, RolloutConfig
 
-
-def _importorskip_usable_vllm():
-    try:
-        from vllm import LLM  # noqa: F401
-    except Exception as exc:
-        pytest.skip(f"vLLM runtime is not importable: {exc}")
-
-
 # ---------------------------------------------------------------------------
 # DisaggregationConfig validation
 # ---------------------------------------------------------------------------
@@ -191,7 +183,7 @@ def _build_kv_cfg(
     mooncake_protocol=None,
 ):
     # Lazy import: only meaningful when vllm-rollout deps are importable.
-    _importorskip_usable_vllm()
+    pytest.importorskip("vllm")
     from verl.workers.rollout.vllm_rollout.vllm_pd_replica import vLLMPDReplica
 
     return vLLMPDReplica._build_kv_transfer_config(
@@ -299,7 +291,7 @@ def _make_pd_config(**overrides) -> RolloutConfig:
 def patched_replica_cls():
     """Patch parent ``vLLMReplica.__init__`` so we can exercise the PD validation
     in isolation (no Ray, no vLLMHttpServer remote-class construction)."""
-    _importorskip_usable_vllm()
+    pytest.importorskip("vllm")
     from verl.workers.rollout.vllm_rollout import vllm_pd_replica as mod
 
     def _stub_super_init(self, replica_rank, config, model_config, gpus_per_node, *_a, **_kw):
@@ -447,7 +439,7 @@ class _DispatchStub:
 
 
 def _import_http_server():
-    _importorskip_usable_vllm()
+    pytest.importorskip("vllm")
     from verl.workers.rollout.vllm_rollout.vllm_async_server import vLLMHttpServer
 
     return vLLMHttpServer

@@ -16,7 +16,7 @@ import os
 
 import pytest
 import ray
-from omegaconf import DictConfig, OmegaConf
+from omegaconf import DictConfig
 from transformers import PreTrainedTokenizer
 
 from tests.checkpoint_engine.test_utils import create_trainer_worker_group
@@ -43,8 +43,6 @@ def init_config() -> DictConfig:
         )
 
     config.actor_rollout_ref.model.path = os.path.expanduser("~/models/Qwen/Qwen3-VL-2B-Instruct")
-    if os.environ["ROLLOUT_NAME"] == "vllm":
-        OmegaConf.update(config, "actor_rollout_ref.model.override_config.attn_implementation", "sdpa", force_add=True)
     config.actor_rollout_ref.rollout.name = os.environ["ROLLOUT_NAME"]
     config.actor_rollout_ref.rollout.max_num_seqs = 256
     config.actor_rollout_ref.rollout.response_length = 4096
