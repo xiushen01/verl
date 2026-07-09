@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+
 import asyncio
 import copy
 import logging
@@ -22,7 +24,7 @@ import re
 import traceback
 from collections import defaultdict
 from io import BytesIO
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any, Optional
 
 import datasets
 import numpy as np
@@ -30,10 +32,12 @@ import torch
 from omegaconf import DictConfig, ListConfig
 from PIL import Image
 from torch.utils.data import Dataset
-from transformers import PreTrainedTokenizer, ProcessorMixin
 
 from verl.utils.import_utils import load_extern_object
 from verl.utils.tokenizer import build_multimodal_processor_inputs, normalize_token_ids
+
+if TYPE_CHECKING:
+    from transformers import PreTrainedTokenizer, ProcessorMixin
 
 logger = logging.getLogger(__name__)
 
