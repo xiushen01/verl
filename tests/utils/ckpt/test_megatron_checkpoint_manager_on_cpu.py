@@ -28,10 +28,15 @@ from unittest.mock import MagicMock, patch
 import pytest
 import torch
 import torch.distributed as dist
-from megatron.core import parallel_state as mpu
 
 from verl.trainer.config import CheckpointConfig
-from verl.utils.checkpoint.megatron_checkpoint_manager import MegatronCheckpointManager
+
+try:
+    from megatron.core import parallel_state as mpu
+
+    from verl.utils.checkpoint.megatron_checkpoint_manager import MegatronCheckpointManager
+except ImportError as exc:
+    pytest.skip(f"Megatron Core is required for these tests: {exc}", allow_module_level=True)
 
 # ---------------------------------------------------------------------------
 # Session-scoped: initialize torch.distributed + megatron parallel state once
