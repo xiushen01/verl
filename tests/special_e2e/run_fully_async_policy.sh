@@ -187,7 +187,7 @@ if [ "${ACTOR_STRATEGY}" == "fsdp2" ]; then
         actor_rollout_ref.actor.fsdp_config.strategy=fsdp2 \
         critic.strategy=fsdp2 \
         actor_rollout_ref.actor.grad_clip=1.0 \
-        actor_rollout_ref.model.override_config.attn_implementation=sdpa \
+        +actor_rollout_ref.model.override_config.attn_implementation=sdpa \
         actor_rollout_ref.model.use_remove_padding=True \
         actor_rollout_ref.actor.use_dynamic_bsz=True \
         actor_rollout_ref.ref.log_prob_use_dynamic_bsz=True \
