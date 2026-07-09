@@ -15,12 +15,14 @@
 Utilities to create common models from huggingface
 """
 
+from __future__ import annotations
+
 import json
 import os
 import re
 import warnings
 from dataclasses import dataclass
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 import torch
@@ -34,8 +36,10 @@ from transformers import (
     AutoModelForTokenClassification,
     GenerationConfig,
     PretrainedConfig,
-    PreTrainedModel,
 )
+
+if TYPE_CHECKING:
+    from transformers import PreTrainedModel
 
 try:
     from transformers import AutoModelForVision2Seq
@@ -611,15 +615,15 @@ def patch_valuehead_model(model) -> None:
     from transformers import PreTrainedModel
     from trl import AutoModelForCausalLMWithValueHead
 
-    def tie_weights(self: "AutoModelForCausalLMWithValueHead") -> None:
+    def tie_weights(self: AutoModelForCausalLMWithValueHead) -> None:
         if isinstance(self.pretrained_model, PreTrainedModel):
             self.pretrained_model.tie_weights()
 
-    def get_input_embeddings(self: "AutoModelForCausalLMWithValueHead") -> torch.nn.Module:
+    def get_input_embeddings(self: AutoModelForCausalLMWithValueHead) -> torch.nn.Module:
         if isinstance(self.pretrained_model, PreTrainedModel):
             return self.pretrained_model.get_input_embeddings()
 
-    def get_output_embeddings(self: "AutoModelForCausalLMWithValueHead") -> torch.nn.Module:
+    def get_output_embeddings(self: AutoModelForCausalLMWithValueHead) -> torch.nn.Module:
         if isinstance(self.pretrained_model, PreTrainedModel):
             return self.pretrained_model.get_output_embeddings()
 
