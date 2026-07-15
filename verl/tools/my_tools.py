@@ -1,5 +1,5 @@
 """
-自定义 FunctionTool 示例。
+自定义 FunctionTool 。
 
 在 YAML 配置中引用：
     actor_rollout_ref:
