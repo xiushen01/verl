@@ -227,6 +227,7 @@ class ToolAgentLoop(AgentLoopBase):
     ) -> AgentState:
         """Handle the generating state: generate model response and check for tool calls."""
         # Inject tool parser stop tokens so generation halts after each tool call
+        #对于gemma4模型生成了工具调用标记，但不会自动emit EOS,需要设置stop token id
         if self.tool_parser.stop_token_ids:
             stop_token_ids = list(set((sampling_params.get("stop_token_ids") or []) + self.tool_parser.stop_token_ids))
             sampling_params = {**sampling_params, "stop_token_ids": stop_token_ids}
@@ -261,6 +262,7 @@ class ToolAgentLoop(AgentLoopBase):
 
         agent_data.assistant_turns += 1
         agent_data.response_ids = output.token_ids
+        # 
         if self.enable_continuous_token:
             merge_result, response_mask, response_logprobs = await self.ct_merge_assistant_token(
                 agent_data.prompt_ids,
